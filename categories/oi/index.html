@@ -6,12 +6,12 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>SaturdayForever</title>
+  <title>Category: oi | SaturdayForever</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="xyq&apos;blog">
 <meta property="og:type" content="website">
 <meta property="og:title" content="SaturdayForever">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/categories/oi/index.html">
 <meta property="og:site_name" content="SaturdayForever">
 <meta property="og:description" content="xyq&apos;blog">
 <meta property="og:locale" content="zh-CN">
@@ -159,68 +159,34 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-treap" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
+  
     
-      <header class="article-header">
-        
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/06/17/treap/" class="archive-article-date">
+  	<time datetime="2019-06-17T03:20:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-17</time>
+</a>
+        </div>
+    	 
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/17/treap/">Treap</a>
+      <a class="archive-article-title" href="/2019/06/17/treap/">Treap</a>
     </h1>
   
 
-        
-        <a href="/2019/06/17/treap/" class="archive-article-date">
-  	<time datetime="2019-06-17T03:20:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>众所周知treap是一种代码较为简单的平衡树 <del><strong>并不</strong></del> </p>
-<p>从数值上来看是一颗二叉搜索树(bit_search_tree)，从权值上看是一个堆(heap)。</p>
-<h3 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h3><p>每一个节点需要保存至少四个信息，当前节点的数值 ( val )， 优先级 ( pri )， 左右儿子 ( ls, rs )。</p>
-<p>除此之外， 可能还会保存以该节点为根的树的大小 ( siz )， 以及该节点相同的数个数 ( m )。</p>
-<blockquote>
-<p>int root,cnt,ch[N][2],val[N],pri[N],m[N],siz[N];</p>
-</blockquote>
-<h3 id="旋转"><a href="#旋转" class="headerlink" title="旋转"></a>旋转</h3><p>分为左旋Zag和右旋Zig。<br>旋转的目的是保证符合堆的性质，同时不破坏二叉排序树的性质，维护二叉排序树的性质都是通过旋转来完成。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">inline void pushup(int p)&#123;</span><br><span class="line">        siz[p]=siz[ch[p][0]]+siz[ch[p][1]]+m[p];</span><br><span class="line">    &#125;</span><br><span class="line">void rotate(int&amp;p,int d)&#123;//将以p为根的子树旋转d=0表示右旋</span><br><span class="line">        int x=ch[p][d];</span><br><span class="line">        ch[p][d]=ch[x][d^1];</span><br><span class="line">        ch[x][d^1]=p;</span><br><span class="line">        siz[x]=siz[p];pushup(p);</span><br><span class="line">        p=x;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h3><p>当然这是在递归调用之中实现的。</p>
-<p>如果该节点为0， 就新开一个。</p>
-<p>如果遇到插入两个相同的值，那么该节点的m直接+1就好。</p>
-<p>比较当前节点键值大小，在左子树或右子树递归调用。</p>
-<p>完成每一个节点的插入， 都要pushup<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void insert(int &amp;p,int x)&#123;</span><br><span class="line">        if(!p)&#123;</span><br><span class="line">            p=newnode(x);</span><br><span class="line">            return ;</span><br><span class="line">        &#125;</span><br><span class="line">        if(val[p]==x)&#123;siz[p]++;m[p]++;return;&#125;</span><br><span class="line">        int d=x&gt;val[p];</span><br><span class="line">        insert(ch[p][d],x);</span><br><span class="line">        pushup(p);</span><br><span class="line">        if(fix[ch[p][d]] &lt; fix[p]) rotate(p,d);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h3><p>节点的删除同样是一个递归的过程，不过需要讨论多种情况：</p>
-<p>如果插入值小于当前节点值，则递归至左儿子；大于则递归至右儿子</p>
-<p>如果插入值等于当前节点值:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">若当前节点数值的出现次数大于 1 ，则减一；</span><br><span class="line">若当前节点数值的出现次数等于于 1：</span><br><span class="line">      若当前节点没有左儿子与右儿子，则直接删除该节点（置 0）；　　　</span><br><span class="line">      若当前节点没有左儿子或右儿子，则将左儿子或右儿子替代该节点；　　　　</span><br><span class="line">      若当前节点有左儿子与右儿子，则不断旋转 当前节点，并走到当前节点新的对应位置，直到没有左儿子或右儿子为止</span><br></pre></td></tr></table></figure>
-<h3 id="查找第k大"><a href="#查找第k大" class="headerlink" title="查找第k大"></a>查找第k大</h3><p>根据递归找到当前节点，并记录小于这个节点的节点的数量（左子树）</p>
-<h3 id="计算x的排名"><a href="#计算x的排名" class="headerlink" title="计算x的排名"></a>计算x的排名</h3><p>用二叉排序树的方法，查找到值=x的节点，排名=左子树的数量+1</p>
-<h3 id="treap代码结构"><a href="#treap代码结构" class="headerlink" title="treap代码结构"></a>treap代码结构</h3><p>privite：</p>
-<ul>
-<li>pushup</li>
-<li>newnode</li>
-<li>rotate  (zig &amp; zag)<br>public:</li>
-<li>insert</li>
-<li>delete</li>
-<li>rank</li>
-<li>k_th</li>
-<li>pre</li>
-<li>suc</li>
-</ul>
-<p>下面是以 luogu P3369 【模板】普通平衡树 为例题的代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits/stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">#define li inline</span><br><span class="line">const int N = 1e6+10;</span><br><span class="line">const int inf = 0x7fffffff;</span><br><span class="line">struct Treap&#123;</span><br><span class="line">    int root,cnt,ch[N][2],val[N],pri[N],m[N],siz[N];</span><br><span class="line">    Treap()&#123;</span><br><span class="line">        root=cnt=0;memset(ch,0,sizeof(ch));</span><br><span class="line">        memset(m,0,sizeof(m));memset(siz,0,sizeof(siz));</span><br><span class="line">    &#125;</span><br><span class="line">	li void pushup(int p)&#123;</span><br><span class="line">		siz[p] = siz[ch[p][0]] +siz[ch[p][1]] + m[p];</span><br><span class="line">	&#125;</span><br><span class="line">	li int newnode(int x)&#123;</span><br><span class="line">		val[++cnt] = x,pri[cnt] = rand()%1000007;m[cnt] = siz[cnt] = 1;</span><br><span class="line">		return cnt;</span><br><span class="line">	&#125;</span><br><span class="line">	void rotate(int &amp;p,int d)&#123;</span><br><span class="line">		int t = ch[p][d];</span><br><span class="line">		ch[p][d] = ch[t][d^1];</span><br><span class="line">		ch[t][d^1] = p;</span><br><span class="line">		siz[t] = siz[p];pushup(p);</span><br><span class="line">		p = t;</span><br><span class="line">	&#125;</span><br><span class="line">	void insert(int &amp;p,int x)&#123;</span><br><span class="line">		if(!p)&#123;</span><br><span class="line">			p = newnode(x);</span><br><span class="line">			return ;</span><br><span class="line">		&#125;</span><br><span class="line">		if(val[p] == x)&#123;</span><br><span class="line">			siz[p]++,m[p]++;return ;</span><br><span class="line">		&#125;</span><br><span class="line">		int d = x &gt; val[p];</span><br><span class="line">		insert(ch[p][d],x);</span><br><span class="line">		pushup(p);</span><br><span class="line">		if(pri[p] &lt; pri[ch[p][d]]) rotate(p,d);</span><br><span class="line">	&#125;</span><br><span class="line">	int del(int &amp;p,int x)&#123;</span><br><span class="line">		if(!p)return 0;</span><br><span class="line">		if(val[p] == x)&#123;</span><br><span class="line">			if(m[p] &gt; 1)&#123;</span><br><span class="line">				m[p]--,siz[p]--;return 1;</span><br><span class="line">			&#125;</span><br><span class="line">			if(!ch[p][0])&#123;</span><br><span class="line">				p = ch[p][1];return 1;</span><br><span class="line">			&#125;</span><br><span class="line">			if(!ch[p][1])&#123;</span><br><span class="line">				p = ch[p][0];return 1;</span><br><span class="line">			&#125;</span><br><span class="line">			int d = pri[ch[p][0]] &gt; pri[ch[p][1]];</span><br><span class="line">			rotate(p,d);siz[p]--;</span><br><span class="line">			return del(ch[p][d^1],x);</span><br><span class="line">		&#125;</span><br><span class="line">		if(!del(ch[p][(int)(x &gt; val[p])], x ))return 0;</span><br><span class="line">		siz[p]--;return 1;</span><br><span class="line">	&#125;</span><br><span class="line">	int rank(int p,int x)&#123;</span><br><span class="line">		int ls = siz[ch[p][0]];</span><br><span class="line">		if(val[p] == x)return ls+1;</span><br><span class="line">		if(val[p] &gt; x)return rank(ch[p][0],x);</span><br><span class="line">		return rank(ch[p][1],x)+ls+m[p];</span><br><span class="line">	&#125;</span><br><span class="line">	int kth(int p,int k)&#123;</span><br><span class="line">		int ls = siz[ch[p][0]];</span><br><span class="line">		if(ls &lt; k&amp;&amp;k &lt;= ls+m[p])return val[p];</span><br><span class="line">		if(k &lt;= ls)return kth(ch[p][0],k);</span><br><span class="line">		return kth(ch[p][1],k-ls-m[p]);</span><br><span class="line">	&#125;</span><br><span class="line">	int pre(int p,int x)&#123;</span><br><span class="line">		if(!p) return -inf;</span><br><span class="line">		if(val[p] &gt;= x)return pre(ch[p][0],x);</span><br><span class="line">		int ret = pre(ch[p][1],x);</span><br><span class="line">		return val[p] &gt; ret? val[p]:ret;</span><br><span class="line">	&#125;</span><br><span class="line">	int suc(int p,int x)&#123;</span><br><span class="line">		if(!p) return inf;</span><br><span class="line">		if(val[p] &lt;= x)return suc(ch[p][1],x);</span><br><span class="line">		int ret = suc(ch[p][0],x);</span><br><span class="line">		return val[p] &lt; ret? val[p]:ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;T;</span><br><span class="line">int main()&#123;</span><br><span class="line">	int n;</span><br><span class="line">	srand(unsigned(time(0)));</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;n);</span><br><span class="line">	while(n--)&#123;</span><br><span class="line">		int o,x;</span><br><span class="line">		scanf(&quot;%d%d&quot;,&amp;o,&amp;x);</span><br><span class="line">		switch(o)&#123;</span><br><span class="line">			case 1:T.insert(T.root,x);break;</span><br><span class="line">			case 2:T.del(T.root,x);break;</span><br><span class="line">			case 3:printf(&quot;%d\n&quot;,T.rank(T.root,x));break;</span><br><span class="line">			case 4:printf(&quot;%d\n&quot;,T.kth(T.root,x));break;</span><br><span class="line">			case 5:printf(&quot;%d\n&quot;,T.pre(T.root,x));break;</span><br><span class="line">			case 6:printf(&quot;%d\n&quot;,T.suc(T.root,x));break;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -236,7 +202,7 @@
 		</ul>
 	</div>
 
-      
+          
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -249,225 +215,17 @@
 	</div>
 
 
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
-    <article id="post-front" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
+  
+    </div></section>
+  
+
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/11/front/">写在前面</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/11/front/" class="archive-article-date">
-  	<time datetime="2019-05-11T03:03:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>介绍这个博客的有关事宜</p>
-<h2 id="更新内容"><a href="#更新内容" class="headerlink" title="更新内容"></a>更新内容</h2><h3 id="oi"><a href="#oi" class="headerlink" title="oi"></a>oi</h3><p>平时大概会更一些我写过的题吧，毕竟这也是主要任务了。</p>
-<p>上次考试又一分没得<del>爆0</del>，难过。<br>希望以后能少犯一点低级错误。</p>
-<h3 id="日常"><a href="#日常" class="headerlink" title="日常"></a>日常</h3><p>我很希望我可以一直把这个博客写下去吧 <em><del>就算退役以后</del></em> ，不过还是有点难。 <em>（到时候退役了我争取把NOIP游记更在这里）</em> </p>
-<p>说不定也会有一些自己的兴趣推荐之类的，<strong><del>但现在咕了。</del></strong></p>
-<h2 id="更新时间"><a href="#更新时间" class="headerlink" title="更新时间"></a>更新时间</h2><p>不定期更新</p>
-<blockquote>
-<p><em><del>人类的本质是鸽子&amp;共鸣者</del></em></p>
-</blockquote>
-<blockquote>
-<p><a href="https://imgchr.com/i/AJlp7R" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/03/23/AJlp7R.md.jpg" alt="AJlp7R.md.jpg"></a></p>
-</blockquote>
-<hr>
-<h3 id="ps"><a href="#ps" class="headerlink" title="ps:"></a>ps:</h3><p>推荐一下<a href="www.3bule1brown.com">3bule1brown</a>。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">日常</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/默认分类//" class="article-tag-list-link color5">默认分类</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-my-first-blog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/02/my-first-blog/">起点</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/02/my-first-blog/" class="archive-article-date">
-  	<time datetime="2019-05-02T08:28:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h4><p>欢迎来到 <a href="https://saturdayforever.github.io/" target="_blank" rel="noopener">SaturdayForever’s blog</a>!</p>
-<p>搭一个博客对我来说比想象中难太多了。</p>
-<p>首先感谢一下<a href="https://github.com/Malelk" target="_blank" rel="noopener">lzn</a>让我搭一个博客。然后因为还在搭建中，所以不要介意内容太少了。</p>
-<h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>xyq，目前正在为NOIP提高组而奋斗的学生，经常被各种巨佬吊打，比如说wym，Anti_O2（<a href="http://lizinuo.xyz/" target="_blank" rel="noopener">Ta的blog</a>），快去看一下吧。</p>
-<p>平常没事的时候，喜欢看书（<del>我自己都不信</del>）， <em><del>被迫切水题</del></em> ，嗯，还有逛逛B站。</p>
-<h4 id="然后列举一下我搭博客用到的教程："><a href="#然后列举一下我搭博客用到的教程：" class="headerlink" title="然后列举一下我搭博客用到的教程："></a>然后列举一下我搭博客用到的教程：</h4><p><a href="https://afar5277.blog.luogu.org/post-zzq-hexoblog" target="_blank" rel="noopener">1.https://afar5277.blog.luogu.org/post-zzq-hexoblog</a></p>
-<p><a href="https://cokemine.blog.luogu.org/ling-ji-chu-ling-cheng-ben-da-jian-shu-yu-zi-ji-di-wordpresshexo-bo-ke" target="_blank" rel="noopener">2.https://cokemine.blog.luogu.org/ling-ji-chu-ling-cheng-ben-da-jian-shu-yu-zi-ji-di-wordpresshexo-bo-ke</a></p>
-<p><a href="https://blog.csdn.net/sinat_37781304/article/details/82729029" target="_blank" rel="noopener">3.https://blog.csdn.net/sinat_37781304/article/details/82729029</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">日常</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">第一篇</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/默认分类//" class="article-tag-list-link color5">默认分类</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-  
 
 
           </div>
@@ -489,11 +247,11 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
+		isHome: false,
 		isPost: false,
 		isArchive: false,
 		isTag: false,
-		isCategory: false,
+		isCategory: true,
 		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",
